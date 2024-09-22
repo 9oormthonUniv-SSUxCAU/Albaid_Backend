@@ -8,6 +8,10 @@ group = 'Albaid'
 version = '0.0.1-SNAPSHOT'
 
 java {
+	sourceCompatibility = "17"
+}
+
+java {
 	toolchain {
 		languageVersion = JavaLanguageVersion.of(17)
 	}
@@ -27,6 +31,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-devtools'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
