@@ -1,6 +1,7 @@
 package Albaid.backend.domain.api;
 
 import Albaid.backend.domain.application.OcrService;
+import Albaid.backend.domain.application.dto.ContractDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +19,7 @@ public class ContractController {
     private final OcrService ocrService;
 
     @PostMapping(value = "/upload", consumes = {MULTIPART_FORM_DATA_VALUE})
-    public String save(@RequestPart MultipartFile contractImage) throws Exception {
+    public ContractDTO save(@RequestPart MultipartFile contractImage) throws Exception {
         return ocrService.extractContractInfo(contractImage);
     }
 }

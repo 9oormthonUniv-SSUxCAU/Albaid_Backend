@@ -1,5 +1,8 @@
 package Albaid.backend.domain.application;
 
+import Albaid.backend.domain.application.dto.ContractDTO;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,21 +20,19 @@ import java.util.UUID;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OcrService {
 
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
+    private final GptService gptService;
 
     @Value("${clova.ocr.api.key}")
     private String OCR_API_KEY;
     @Value("${clova.ocr.api.url}")
     private String OCR_API_URL;
 
-    public OcrService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
-
-    public String extractContractInfo(MultipartFile image) throws Exception {
-
+    public ContractDTO extractContractInfo(MultipartFile image) throws Exception {
         int retryCount = 0;
         int maxRetries = 3;
         JSONArray imagesArray = null;
@@ -84,20 +85,9 @@ public class OcrService {
 
         // 7. OCR 결과에서 텍스트 정보만 추출
         String finalText = OcrResultTextExtractor(imagesArray);
-
-        return finalText;
-//        return new ContractDTO(
-//                "서울시 강남구 역삼동",  // 실제 OCR 결과에서 근무지를 추출해야 함
-//                null,  // 계약 시작일
-//                null,  // 계약 종료일
-//                null,  // 근무 시작 시간
-//                null,  // 근무 종료 시간
-//                5,     // 근무 일자
-//                8590,  // 시급
-//                true,  // 연차 유급휴가 여부
-//                true,  // 사회보험 적용 여부
-//                true   // 근로계약서 교부 여부
-//        );
+        String contractInfoFromJsonText = gptService.extractContractInfoFromText(finalText);
+        System.out.println(contractInfoFromJsonText);
+        return objectMapper.readValue(contractInfoFromJsonText, ContractDTO.class);
     }
 
     private String OcrResultTextExtractor(JSONArray imagesArray) throws JSONException {
