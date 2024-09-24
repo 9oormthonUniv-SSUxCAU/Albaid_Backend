@@ -1,0 +1,28 @@
+package Albaid.backend.domain.member.entity;
+
+import Albaid.backend.domain.contract.entity.Contract;
+import Albaid.backend.global.base.BaseEntity;
+import jakarta.persistence.*;
+import lombok.*;
+
+import java.time.LocalDate;
+import java.util.List;
+
+@Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
+public class Member extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    private String name;  // 이름
+    private LocalDate birthdate;  // 생년월일
+    private String phone;  // 전화번호
+
+    @OneToMany(mappedBy = "member")
+    private List<Contract> contracts;
+}
