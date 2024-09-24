@@ -1,4 +1,4 @@
-package Albaid.backend.domain.application.dto;
+package Albaid.backend.domain.contract.application.dto;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
-package Albaid.backend.domain.application;
+package Albaid.backend.domain.contract.application;
 
-import Albaid.backend.domain.application.dto.ContractDTO;
+import Albaid.backend.domain.contract.application.dto.ContractDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

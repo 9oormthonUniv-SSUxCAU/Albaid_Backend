@@ -1,7 +1,7 @@
-package Albaid.backend.domain.api;
+package Albaid.backend.domain.contract.api;
 
-import Albaid.backend.domain.application.OcrService;
-import Albaid.backend.domain.application.dto.ContractDTO;
+import Albaid.backend.domain.contract.application.OcrService;
+import Albaid.backend.domain.contract.application.dto.ContractDTO;
 import Albaid.backend.global.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
