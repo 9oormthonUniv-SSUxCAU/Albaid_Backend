@@ -1,4 +1,4 @@
-package Albaid.backend.domain.application;
+package Albaid.backend.domain.contract.application;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -65,13 +65,13 @@ public class GptService {
     }
 
     private String getSystemContent() {
-        return "Please extract the following information from the given contract text. " +
+        return "Please extract the following information from the given Contract text. " +
                 "Ensure that the output is in strict JSON format with the appropriate field names and values. " +
                 "If any information is not provided or not applicable, return null for that field. " +
                 "All boolean values should be returned as true or false. The required fields are:\n\n" +
                 "- workplace (string): The name or address of the workplace. If not provided, return null.\n" +
-                "- contractStartDate (string): The start date of the contract in 'YYYY-MM-DD' format. If not provided, return null.\n" +
-                "- contractEndDate (string): The end date of the contract in 'YYYY-MM-DD' format. If not provided, return null.\n" +
+                "- contractStartDate (string): The start date of the Contract in 'YYYY-MM-DD' format. If not provided, return null.\n" +
+                "- contractEndDate (string): The end date of the Contract in 'YYYY-MM-DD' format. If not provided, return null.\n" +
                 "- standardWorkingStartTime (string): The start time of the standard working hours (e.g., '10:00'). If not provided, return null.\n" +
                 "- standardWorkingEndTime (string): The end time of the standard working hours (e.g., '16:00'). If not provided, return null.\n" +
                 "- workingDays (array): A list of days of the week the employee is expected to work (e.g., ['Monday', 'Wednesday']). If not provided, return null.\n" +
@@ -79,7 +79,7 @@ public class GptService {
                 "- jobDescription (string): A brief description of the job duties. If not provided, return null.\n" +
                 "- isPaidAnnualLeave (boolean): true if paid annual leave is provided, otherwise false.\n" +
                 "- isSocialInsurance (boolean): true if social insurance is applied, otherwise false.\n" +
-                "- isContractDelivery (boolean): true if the employee has been provided with a copy of the contract, otherwise false.\n" +
+                "- isContractDelivery (boolean): true if the employee has been provided with a copy of the Contract, otherwise false.\n" +
                 "- isSafe (boolean): true if all of the following are true: paidAnnualLeave, socialInsurance, contractDelivery. Otherwise, return false.\n\n" +
                 "Example output:\n" +
                 "{\n" +
