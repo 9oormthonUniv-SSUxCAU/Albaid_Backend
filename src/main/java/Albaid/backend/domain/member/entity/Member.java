@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,5 +25,5 @@ public class Member extends BaseEntity {
     private String phone;  // 전화번호
 
     @OneToMany(mappedBy = "member")
-    private List<Contract> contracts;
+    private List<Contract> contracts = new ArrayList<>();
 }
