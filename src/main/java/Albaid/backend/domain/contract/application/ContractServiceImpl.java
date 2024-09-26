@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static Albaid.backend.global.response.ErrorCode.INTERNAL_SERVER_ERROR;
@@ -61,6 +62,7 @@ public class ContractServiceImpl implements ContractService {
                 .isSocialInsurance(request.isSocialInsurance())
                 .isContractDelivery(request.isContractDelivery())
                 .memo(request.memo())
+                .workingDays(new ArrayList<>())
                 .build();
 
         request.workingDays().forEach(day -> contract.addWorkingDay(new WorkingDays(day, contract)));

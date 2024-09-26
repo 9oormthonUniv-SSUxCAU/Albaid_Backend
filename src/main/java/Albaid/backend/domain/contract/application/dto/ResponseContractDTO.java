@@ -9,6 +9,7 @@ import java.util.List;
 
 public record ResponseContractDTO(
         Integer id,
+        String url,
         String title,
         String workplace,
         LocalDate contractStartDate,
@@ -26,6 +27,7 @@ public record ResponseContractDTO(
     public static ResponseContractDTO of(Contract contract) {
         return new ResponseContractDTO(
                 contract.getId(),
+                contract.getUrl(),
                 contract.getTitle(),
                 contract.getWorkplace(),
                 contract.getContractStartDate(),
