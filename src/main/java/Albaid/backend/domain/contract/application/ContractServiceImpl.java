@@ -1,11 +1,14 @@
 package Albaid.backend.domain.contract.application;
 
 import Albaid.backend.domain.contract.application.dto.ContractDTO;
+import Albaid.backend.domain.contract.application.dto.ContractListDTO;
 import Albaid.backend.domain.contract.application.dto.RequestContractDTO;
 import Albaid.backend.domain.contract.application.dto.ResponseContractDTO;
 import Albaid.backend.domain.contract.entity.Contract;
 import Albaid.backend.domain.contract.entity.WorkingDays;
 import Albaid.backend.domain.contract.repository.ContractRepository;
+import Albaid.backend.domain.member.entity.Member;
+import Albaid.backend.domain.member.repository.MemberRepository;
 import Albaid.backend.global.response.CustomException;
 import Albaid.backend.global.util.ai.GptService;
 import Albaid.backend.global.util.ai.OcrService;
@@ -28,10 +31,27 @@ import static Albaid.backend.global.response.ErrorCode.NOT_FOUND_RESOURCE;
 public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepository;
+    private final MemberRepository memberRepository;
+
     private final OcrService ocrService;
     private final GptService gptService;
     private final S3ImageService s3ImageService;
     private final ObjectMapper objectMapper;
+
+    @Override
+    public List<ContractListDTO> getContractList() {
+        return contractRepository.findContractsByMemberId(1)// TODO : member id를  가져오기
+                .stream()
+                .map(ContractListDTO::of)
+                .toList();
+    }
+
+    @Override
+    public ResponseContractDTO getContract(Integer contractId) {
+        Contract contract = contractRepository.findById(contractId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "계약서를 찾을 수 없습니다."));
+        return ResponseContractDTO.of(contract);
+    }
 
     @Override
     public ContractDTO extractContractInfo(MultipartFile image) {
@@ -47,7 +67,11 @@ public class ContractServiceImpl implements ContractService {
     @Transactional
     @Override
     public ResponseContractDTO saveContract(MultipartFile image, RequestContractDTO request) {
+
+        Member member = memberRepository.findById(1)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "사용자를 찾을 수 없습니다."));// TODO : member id를  가져오기
         String url = s3ImageService.upload("contract", List.of(image)).get(0);
+
         Contract contract = Contract.builder()
                 .title(request.title())
                 .url(url)
@@ -63,6 +87,7 @@ public class ContractServiceImpl implements ContractService {
                 .isContractDelivery(request.isContractDelivery())
                 .memo(request.memo())
                 .workingDays(new ArrayList<>())
+                .member(member)
                 .build();
 
         request.workingDays().forEach(day -> contract.addWorkingDay(new WorkingDays(day, contract)));
