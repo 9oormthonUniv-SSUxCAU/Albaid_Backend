@@ -2,12 +2,15 @@ package Albaid.backend.domain.contract.api;
 
 import Albaid.backend.domain.contract.application.ContractService;
 import Albaid.backend.domain.contract.application.dto.ContractDTO;
+import Albaid.backend.domain.contract.application.dto.ContractListDTO;
 import Albaid.backend.domain.contract.application.dto.RequestContractDTO;
 import Albaid.backend.domain.contract.application.dto.ResponseContractDTO;
 import Albaid.backend.global.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 
@@ -17,6 +20,18 @@ import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 public class ContractController {
 
     private final ContractService contractService;
+
+    @GetMapping
+    public Response<List<ContractListDTO>> getListContract() {
+        List<ContractListDTO> contractList = contractService.getContractList();
+        return Response.success(contractList);
+    }
+
+    @GetMapping("/{contractId}")
+    public Response<ResponseContractDTO> getContract(@PathVariable Integer contractId) {
+        ResponseContractDTO contract = contractService.getContract(contractId);
+        return Response.success(contract);
+    }
 
     @PostMapping(value = "/upload", consumes = {MULTIPART_FORM_DATA_VALUE})
     public Response<ContractDTO> uploadContractImage(@RequestPart MultipartFile contractImage) {
