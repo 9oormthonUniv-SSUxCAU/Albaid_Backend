@@ -7,8 +7,8 @@ import Albaid.backend.domain.contract.application.dto.ResponseContractDTO;
 import Albaid.backend.domain.contract.entity.Contract;
 import Albaid.backend.domain.contract.entity.WorkingDays;
 import Albaid.backend.domain.contract.repository.ContractRepository;
+import Albaid.backend.domain.member.application.MemberService;
 import Albaid.backend.domain.member.entity.Member;
-import Albaid.backend.domain.member.repository.MemberRepository;
 import Albaid.backend.global.response.CustomException;
 import Albaid.backend.global.util.ai.GptService;
 import Albaid.backend.global.util.ai.OcrService;
@@ -31,8 +31,8 @@ import static Albaid.backend.global.response.ErrorCode.NOT_FOUND_RESOURCE;
 public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepository;
-    private final MemberRepository memberRepository;
 
+    private final MemberService memberService;
     private final OcrService ocrService;
     private final GptService gptService;
     private final S3ImageService s3ImageService;
@@ -40,7 +40,8 @@ public class ContractServiceImpl implements ContractService {
 
     @Override
     public List<ContractListDTO> getContractList() {
-        return contractRepository.findContractsByMemberId(1)// TODO : member id를  가져오기
+        Member member = memberService.getCurrentMember();
+        return contractRepository.findContractsByMemberId(member.getId())
                 .stream()
                 .map(ContractListDTO::of)
                 .toList();
@@ -67,9 +68,8 @@ public class ContractServiceImpl implements ContractService {
     @Transactional
     @Override
     public ResponseContractDTO saveContract(MultipartFile image, RequestContractDTO request) {
+        Member member = memberService.getCurrentMember();
 
-        Member member = memberRepository.findById(1)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "사용자를 찾을 수 없습니다."));// TODO : member id를  가져오기
         String url = s3ImageService.upload("contract", List.of(image)).get(0);
 
         Contract contract = Contract.builder()
