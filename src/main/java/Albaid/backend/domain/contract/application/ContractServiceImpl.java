@@ -18,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static Albaid.backend.global.response.ErrorCode.INTERNAL_SERVER_ERROR;
 import static Albaid.backend.global.response.ErrorCode.NOT_FOUND_RESOURCE;
@@ -82,6 +83,7 @@ public class ContractServiceImpl implements ContractService {
         return ResponseContractDTO.of(contract);
     }
 
+
     @Transactional
     @Override
     public void deleteContract(Integer contractId) {
@@ -90,5 +92,28 @@ public class ContractServiceImpl implements ContractService {
         s3ImageService.deleteImagesFromS3(List.of(contract.getUrl()));
         contractRepository.delete(contract);
     }
-}
+
+
+        @Override
+        public List<ContractDTO> getContractsForMember(Long memberId) {
+            List<Contract> contracts = contractRepository.findByMemberId(memberId);
+            return contracts.stream()
+                    .map(contract -> new ContractDTO(
+                            contract.getWorkplace(),
+                            contract.getContractStartDate().toString(),
+                            contract.getContractEndDate().toString(),
+                            contract.getStandardWorkingStartTime().toString(),
+                            contract.getStandardWorkingEndTime().toString(),
+                            null,
+                            contract.getHourlyWage(),
+                            contract.getJobDescription(),
+                            contract.isPaidAnnualLeave(),
+                            contract.isSocialInsurance(),
+                            contract.isContractDelivery(),
+                            contract.isSafe()
+                    ))
+                    .collect(Collectors.toList());
+        }
+    }
+
 
