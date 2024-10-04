@@ -35,6 +35,7 @@ public class Contract extends BaseEntity {
     private boolean isSocialInsurance;
     private boolean isContractDelivery;
     private String memo;
+    private boolean isSafe;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

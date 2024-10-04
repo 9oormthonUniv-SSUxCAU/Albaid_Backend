@@ -1,5 +1,7 @@
 package Albaid.backend.domain.contract.application.dto;
 
+import lombok.*;
+
 import java.util.List;
 
 public record ContractDTO(
