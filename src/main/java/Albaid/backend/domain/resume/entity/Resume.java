@@ -23,7 +23,7 @@ public class Resume extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
     private String title;
 
     @Column(columnDefinition = "TEXT")

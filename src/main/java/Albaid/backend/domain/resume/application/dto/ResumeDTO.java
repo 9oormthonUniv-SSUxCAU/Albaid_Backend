@@ -17,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class ResumeDTO {
 
-    private Long id;
+    private Integer id;
     private String name;
     private String title;
     private String summary;
@@ -28,7 +28,7 @@ public class ResumeDTO {
     private String desiredLocation;
     private String desiredJob;
     private String totalCareerDuration;
-    private Long memberId;
+    private Integer memberId;
     private List<CareerDTO> careers;
 
     public static ResumeDTO of(Resume resume, List<CareerDTO> careers) {

@@ -120,7 +120,7 @@ public class ContractServiceImpl implements ContractService {
 
 
         @Override
-        public List<ContractDTO> getContractsForMember(Long memberId) {
+        public List<ContractDTO> getContractsForMember(Integer memberId) {
             List<Contract> contracts = contractRepository.findByMemberId(memberId);
             return contracts.stream()
                     .map(contract -> new ContractDTO(

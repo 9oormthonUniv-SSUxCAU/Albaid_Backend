@@ -156,7 +156,7 @@ public class ResumeServiceImpl implements ResumeService {
                 .collect(Collectors.toList());
     }
 
-    // private List<CareerDTO> convertCareersToDTO(List<Career> careers) { 주석 처리
+    // private List<CareerDTO> convertCareersToDTO(List<Career> careers) {
     //     return careers.stream()
     //             .map(career -> CareerDTO.builder()
     //                     .companyName(career.getCompanyName())
