@@ -34,7 +34,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers("/error", "/favicon.ico", "/static/**", "/public/**", "/resources/**",
-                        "/login", "/logout", "/api/auth/**"
+                        "/login", "/logout", "/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**"
                 );
     }
 
@@ -62,4 +62,6 @@ public class SecurityConfig {
                 .addFilterBefore(new JwtTokenFilter(jwtTokenUtils), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
+
+
 }
