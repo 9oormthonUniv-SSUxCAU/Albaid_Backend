@@ -8,9 +8,9 @@ import Albaid.backend.domain.resume.application.dto.ResumeDTO;
 import Albaid.backend.domain.resume.entity.Resume;
 import Albaid.backend.domain.resume.repository.ResumeRepository;
 import Albaid.backend.global.response.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static Albaid.backend.global.response.ErrorCode.NOT_FOUND_RESOURCE;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
 
@@ -38,9 +38,9 @@ public class ResumeServiceImpl implements ResumeService {
 
         // 경력사항 추가
         // 기존의 경력 + 근로계약서에서 추출된 경력 결합
-        List<CareerDTO> combinedCareers = new ArrayList<>();
+        List<CareerDTO> combinedCareers = new ArrayList<>(convertContractsToCareers(contracts));  // 계약서에서 추출된 경력
+
         // combinedCareers.addAll(convertCareersToDTO(resume.getCareers()));  // 이력서에 추가된 경력 주석 처리
-        combinedCareers.addAll(convertContractsToCareers(contracts));  // 계약서에서 추출된 경력
 
         // 최종적으로 결합된 경력을 포함한 ResumeDTO 반환
         return ResumeDTO.of(resume, combinedCareers);

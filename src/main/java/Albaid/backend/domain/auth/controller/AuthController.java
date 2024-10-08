@@ -1,7 +1,7 @@
 package Albaid.backend.domain.auth.controller;
 
 import Albaid.backend.domain.auth.application.AuthService;
-import Albaid.backend.domain.auth.dto.TokenInfo;
+import Albaid.backend.domain.auth.application.dto.TokenInfo;
 import Albaid.backend.global.response.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

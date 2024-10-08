@@ -1,6 +1,6 @@
 package Albaid.backend.domain.auth.application;
 
-import Albaid.backend.domain.auth.dto.TokenInfo;
+import Albaid.backend.domain.auth.application.dto.TokenInfo;
 import Albaid.backend.domain.member.entity.Member;
 import Albaid.backend.domain.member.repository.MemberRepository;
 import Albaid.backend.global.response.CustomException;

@@ -25,6 +25,7 @@ public class Contract extends BaseEntity {
     private String title;
     private String url;
     private String workplace;
+    private String occupation;
     private LocalDate contractStartDate;
     private LocalDate contractEndDate;
     private LocalTime standardWorkingStartTime;
