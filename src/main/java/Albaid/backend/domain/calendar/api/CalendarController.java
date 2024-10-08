@@ -3,8 +3,6 @@ package Albaid.backend.domain.calendar.api;
 import Albaid.backend.domain.calendar.application.CalendarService;
 import Albaid.backend.domain.calendar.entity.Calendar;
 import Albaid.backend.global.response.Response;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
