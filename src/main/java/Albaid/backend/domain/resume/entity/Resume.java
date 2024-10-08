@@ -23,19 +23,18 @@ public class Resume extends BaseEntity {
     private Long id;
 
     private String title;
-
     private String summary;
-    private String desiredLocation;
-    private String desiredJob;
-    private String totalCareerDuration;
-
-    private String name;
     private String phone;
     private String email;
     private String address;
 
     @Enumerated(EnumType.STRING)
     private EducationLevel finalEducation;
+
+    private String totalCareerDuration;
+    private String qualifications;
+    private String desiredLocation;
+    private String desiredJob;
 
     // Member 테이블과의 외래 키 관계 설정
     @ManyToOne(fetch = FetchType.LAZY)

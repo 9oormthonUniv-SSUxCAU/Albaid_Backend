@@ -1,4 +1,4 @@
-package Albaid.backend.domain.auth.dto;
+package Albaid.backend.domain.auth.application.dto;
 
 import lombok.Builder;
 

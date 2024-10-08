@@ -1,11 +1,10 @@
 package Albaid.backend.domain.contract.application.dto;
 
-import lombok.*;
-
 import java.util.List;
 
 public record ContractDTO(
         String workplace,
+        String occupation,
         String contractStartDate,
         String contractEndDate,
         String standardWorkingStartTime,

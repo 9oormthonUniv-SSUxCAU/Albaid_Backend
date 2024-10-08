@@ -17,23 +17,20 @@ import java.util.List;
 public class ResumeDTO {
 
     private Long id;
-    private String name;
     private String title;
     private String summary;
     private String phone;
-    private String email;
     private String address;
+    private String email;
     private EducationLevel finalEducation;
+    private String totalCareerDuration;
     private String desiredLocation;
     private String desiredJob;
-    private String totalCareerDuration;
-    private Integer memberId;
     private List<CareerDTO> careers;
 
     public static ResumeDTO of(Resume resume, List<CareerDTO> careers) {
         return ResumeDTO.builder()
                 .id(resume.getId())
-                .name(resume.getName())
                 .title(resume.getTitle())
                 .summary(resume.getSummary())
                 .phone(resume.getPhone())

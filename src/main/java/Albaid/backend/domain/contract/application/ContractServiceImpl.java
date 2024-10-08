@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,23 +72,7 @@ public class ContractServiceImpl implements ContractService {
 
         String url = s3ImageService.upload("contract", List.of(image)).get(0);
 
-        Contract contract = Contract.builder()
-                .title(request.title())
-                .url(url)
-                .workplace(request.workplace())
-                .contractStartDate(request.contractStartDate())
-                .contractEndDate(request.contractEndDate())
-                .standardWorkingStartTime(request.standardWorkingStartTime())
-                .standardWorkingEndTime(request.standardWorkingEndTime())
-                .hourlyWage(request.hourlyWage())
-                .jobDescription(request.jobDescription())
-                .isPaidAnnualLeave(request.isPaidAnnualLeave())
-                .isSocialInsurance(request.isSocialInsurance())
-                .isContractDelivery(request.isContractDelivery())
-                .memo(request.memo())
-                .workingDays(new ArrayList<>())
-                .member(member)
-                .build();
+        Contract contract = request.toContract(member, url);
 
         request.workingDays().forEach(day -> contract.addWorkingDay(new WorkingDays(day, contract)));
 
@@ -118,13 +101,13 @@ public class ContractServiceImpl implements ContractService {
         contractRepository.delete(contract);
     }
 
-
     @Override
     public List<ContractDTO> getContractsForMember(Integer memberId) {
         List<Contract> contracts = contractRepository.findByMemberId(memberId);
         return contracts.stream()
                 .map(contract -> new ContractDTO(
                         contract.getWorkplace(),
+                        contract.getOccupation(),
                         contract.getContractStartDate().toString(),
                         contract.getContractEndDate().toString(),
                         contract.getStandardWorkingStartTime().toString(),
