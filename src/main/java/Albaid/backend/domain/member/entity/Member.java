@@ -18,7 +18,7 @@ public class Member extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String name;  // 이름
     private LocalDate birthdate;  // 생년월일

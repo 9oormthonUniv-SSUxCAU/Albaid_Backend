@@ -1,10 +1,10 @@
-package Albaid.backend.domain.auth.oauth.service;
+package Albaid.backend.global.security.oauth.service;
 
-import Albaid.backend.domain.auth.UserPrincipal;
-import Albaid.backend.domain.auth.oauth.entity.Oauth2UserInfo;
-import Albaid.backend.domain.auth.oauth.entity.impl.GoogleUserInfo;
-import Albaid.backend.domain.auth.oauth.entity.impl.KakaoUserInfo;
-import Albaid.backend.domain.auth.oauth.entity.impl.NaverUserInfo;
+import Albaid.backend.global.security.UserPrincipal;
+import Albaid.backend.global.security.oauth.entity.Oauth2UserInfo;
+import Albaid.backend.global.security.oauth.entity.impl.GoogleUserInfo;
+import Albaid.backend.global.security.oauth.entity.impl.KakaoUserInfo;
+import Albaid.backend.global.security.oauth.entity.impl.NaverUserInfo;
 import Albaid.backend.domain.member.entity.Member;
 import Albaid.backend.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;

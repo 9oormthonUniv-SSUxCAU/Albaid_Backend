@@ -1,10 +1,10 @@
 package Albaid.backend.global.config;
 
-import Albaid.backend.domain.auth.oauth.service.OAuth2FailureHandler;
-import Albaid.backend.domain.auth.oauth.service.OAuth2SuccessHandler;
-import Albaid.backend.domain.auth.oauth.service.CustomOAuth2UserService;
-import Albaid.backend.domain.auth.jwt.JwtTokenFilter;
-import Albaid.backend.domain.auth.jwt.JwtTokenUtils;
+import Albaid.backend.global.security.jwt.JwtTokenFilter;
+import Albaid.backend.global.security.jwt.JwtTokenUtils;
+import Albaid.backend.global.security.oauth.service.CustomOAuth2UserService;
+import Albaid.backend.global.security.oauth.service.OAuth2FailureHandler;
+import Albaid.backend.global.security.oauth.service.OAuth2SuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +34,7 @@ public class SecurityConfig {
     public WebSecurityCustomizer webSecurityCustomizer() {
         return (web) -> web.ignoring()
                 .requestMatchers("/error", "/favicon.ico", "/static/**", "/public/**", "/resources/**",
-                        "/login", "/logout", "/api/auth/**"
+                        "/login", "/logout", "/api/auth/**","/v3/api-docs/**", "/swagger-resources/**", "/swagger-ui/**", "/webjars/**"
                 );
     }
 

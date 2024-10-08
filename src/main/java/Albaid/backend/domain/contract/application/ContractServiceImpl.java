@@ -119,26 +119,26 @@ public class ContractServiceImpl implements ContractService {
     }
 
 
-        @Override
-        public List<ContractDTO> getContractsForMember(Long memberId) {
-            List<Contract> contracts = contractRepository.findByMemberId(memberId);
-            return contracts.stream()
-                    .map(contract -> new ContractDTO(
-                            contract.getWorkplace(),
-                            contract.getContractStartDate().toString(),
-                            contract.getContractEndDate().toString(),
-                            contract.getStandardWorkingStartTime().toString(),
-                            contract.getStandardWorkingEndTime().toString(),
-                            null,
-                            contract.getHourlyWage(),
-                            contract.getJobDescription(),
-                            contract.isPaidAnnualLeave(),
-                            contract.isSocialInsurance(),
-                            contract.isContractDelivery(),
-                            contract.isSafe()
-                    ))
-                    .collect(Collectors.toList());
-        }
+    @Override
+    public List<ContractDTO> getContractsForMember(Integer memberId) {
+        List<Contract> contracts = contractRepository.findByMemberId(memberId);
+        return contracts.stream()
+                .map(contract -> new ContractDTO(
+                        contract.getWorkplace(),
+                        contract.getContractStartDate().toString(),
+                        contract.getContractEndDate().toString(),
+                        contract.getStandardWorkingStartTime().toString(),
+                        contract.getStandardWorkingEndTime().toString(),
+                        null,
+                        contract.getHourlyWage(),
+                        contract.getJobDescription(),
+                        contract.isPaidAnnualLeave(),
+                        contract.isSocialInsurance(),
+                        contract.isContractDelivery(),
+                        contract.isSafe()
+                ))
+                .collect(Collectors.toList());
     }
+}
 
 

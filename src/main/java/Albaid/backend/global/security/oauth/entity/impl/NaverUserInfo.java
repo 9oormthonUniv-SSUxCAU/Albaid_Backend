@@ -1,6 +1,6 @@
-package Albaid.backend.domain.auth.oauth.entity.impl;
+package Albaid.backend.global.security.oauth.entity.impl;
 
-import Albaid.backend.domain.auth.oauth.entity.Oauth2UserInfo;
+import Albaid.backend.global.security.oauth.entity.Oauth2UserInfo;
 
 import java.util.Map;
 

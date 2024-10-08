@@ -1,8 +1,8 @@
-package Albaid.backend.domain.auth.rft.service;
+package Albaid.backend.global.security.rft.service;
 
 
-import Albaid.backend.domain.auth.rft.entity.RefreshToken;
-import Albaid.backend.domain.auth.rft.repository.RefreshTokenRepository;
+import Albaid.backend.global.security.rft.entity.RefreshToken;
+import Albaid.backend.global.security.rft.repository.RefreshTokenRepository;
 import Albaid.backend.global.response.CustomException;
 import Albaid.backend.global.response.ErrorCode;
 import lombok.RequiredArgsConstructor;

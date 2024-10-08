@@ -1,4 +1,4 @@
-package Albaid.backend.domain.auth;
+package Albaid.backend.global.security;
 
 import Albaid.backend.domain.member.entity.Member;
 import lombok.Getter;
