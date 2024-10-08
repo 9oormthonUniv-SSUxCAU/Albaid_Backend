@@ -1,7 +1,7 @@
 package Albaid.backend.domain.resume.application;
 
-import Albaid.backend.domain.Career.application.dto.CareerDTO;
-import Albaid.backend.domain.Career.entity.Career;
+import Albaid.backend.domain.career.application.dto.CareerDTO;
+import Albaid.backend.domain.career.entity.Career;
 import Albaid.backend.domain.contract.application.ContractService;
 import Albaid.backend.domain.contract.application.dto.ContractDTO;
 import Albaid.backend.domain.resume.application.dto.ResumeDTO;

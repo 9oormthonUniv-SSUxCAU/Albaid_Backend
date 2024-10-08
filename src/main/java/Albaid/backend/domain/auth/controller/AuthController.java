@@ -1,35 +1,22 @@
 package Albaid.backend.domain.auth.controller;
 
+import Albaid.backend.domain.auth.application.AuthService;
 import Albaid.backend.domain.auth.dto.TokenInfo;
-import Albaid.backend.domain.auth.jwt.JwtTokenUtils;
-import Albaid.backend.domain.auth.rft.entity.RefreshToken;
-import Albaid.backend.domain.auth.rft.service.RefreshTokenService;
-import Albaid.backend.domain.member.entity.Member;
-import Albaid.backend.domain.member.repository.MemberRepository;
-import Albaid.backend.global.response.CustomException;
 import Albaid.backend.global.response.Response;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
-import static Albaid.backend.global.response.ErrorCode.INVALID_TOKEN;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class AuthController {
 
-    private final MemberRepository memberRepository;
-    private final RefreshTokenService refreshTokenService;
-    private final JwtTokenUtils jwtTokenUtils;
-
-    @Value("${url.base}")
-    private String BASE_URL;
+    private final AuthService authService;
 
     // 클라이언트가 소셜 로그인 요청 시 사용할 엔드포인트
     @GetMapping("/login/{provider}")
     public Response<String> login(@PathVariable String provider) {
-        String redirectUrl = BASE_URL + "/oauth2/authorization/" + provider;
+        String redirectUrl = authService.login(provider);
         return Response.success(redirectUrl);
     }
 
@@ -51,21 +38,7 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public Response<TokenInfo> refresh(@RequestHeader("refreshToken") String refreshToken) {
-        RefreshToken findRefreshToken = refreshTokenService.findRefreshToken(refreshToken);
-
-        String providerId = findRefreshToken.getProviderId();
-        Member member = memberRepository.findByProviderId(providerId);
-        if (member == null) {
-            throw new CustomException(INVALID_TOKEN);
-        }
-
-        String newAccessToken = jwtTokenUtils.generateAccessToken(providerId);
-        TokenInfo tokenInfo = TokenInfo.builder()
-                .type("Bearer")
-                .accessToken(newAccessToken)
-                .accessTokenExpiresIn(jwtTokenUtils.getTokenExpirationDate().getTime())
-                .build();
-
+        TokenInfo tokenInfo = authService.refresh(refreshToken);
         return Response.success(tokenInfo);
     }
 

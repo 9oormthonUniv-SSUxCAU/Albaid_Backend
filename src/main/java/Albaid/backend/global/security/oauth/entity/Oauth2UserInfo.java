@@ -1,4 +1,4 @@
-package Albaid.backend.domain.auth.oauth.entity;
+package Albaid.backend.global.security.oauth.entity;
 
 public interface Oauth2UserInfo {
     String getProviderId();

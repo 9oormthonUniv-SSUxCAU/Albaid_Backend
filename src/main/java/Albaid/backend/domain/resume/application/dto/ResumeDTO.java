@@ -1,7 +1,6 @@
 package Albaid.backend.domain.resume.application.dto;
 
-import Albaid.backend.domain.Career.application.dto.CareerDTO;
-import Albaid.backend.domain.contract.application.dto.ContractDTO;
+import Albaid.backend.domain.career.application.dto.CareerDTO;
 import Albaid.backend.domain.resume.entity.Resume;
 import Albaid.backend.global.enums.EducationLevel;
 import lombok.AllArgsConstructor;
@@ -28,7 +27,7 @@ public class ResumeDTO {
     private String desiredLocation;
     private String desiredJob;
     private String totalCareerDuration;
-    private Long memberId;
+    private Integer memberId;
     private List<CareerDTO> careers;
 
     public static ResumeDTO of(Resume resume, List<CareerDTO> careers) {

@@ -1,6 +1,6 @@
-package Albaid.backend.domain.Career.application.dto;
+package Albaid.backend.domain.career.application.dto;
 
-import Albaid.backend.domain.Career.entity.Career;
+import Albaid.backend.domain.career.entity.Career;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

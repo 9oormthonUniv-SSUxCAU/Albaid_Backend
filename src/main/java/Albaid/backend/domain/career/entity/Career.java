@@ -1,26 +1,27 @@
-package Albaid.backend.domain.Career.entity;
+package Albaid.backend.domain.career.entity;
 
 import Albaid.backend.domain.resume.entity.Resume;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Builder
-@Getter
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Career {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Integer id;
 
     private String companyName;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
 

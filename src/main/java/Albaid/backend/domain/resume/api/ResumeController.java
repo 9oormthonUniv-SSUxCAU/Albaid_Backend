@@ -1,6 +1,6 @@
 package Albaid.backend.domain.resume.api;
 
-import Albaid.backend.domain.Career.application.dto.CareerDTO;
+import Albaid.backend.domain.career.application.dto.CareerDTO;
 import Albaid.backend.domain.resume.application.ResumeService;
 import Albaid.backend.domain.resume.application.dto.ResumeDTO;
 import Albaid.backend.global.response.Response;
@@ -57,6 +57,4 @@ public class ResumeController {
         ResumeDTO addedCareer = resumeService.addCareer(id, careerDto);
         return Response.success(addedCareer);
     }
-
-
 }
