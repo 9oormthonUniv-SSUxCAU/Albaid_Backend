@@ -118,27 +118,51 @@ public class ContractServiceImpl implements ContractService {
         contractRepository.delete(contract);
     }
 
-
-        @Override
-        public List<ContractDTO> getContractsForMember(Integer memberId) {
-            List<Contract> contracts = contractRepository.findByMemberId(memberId);
-            return contracts.stream()
-                    .map(contract -> new ContractDTO(
-                            contract.getWorkplace(),
-                            contract.getContractStartDate().toString(),
-                            contract.getContractEndDate().toString(),
-                            contract.getStandardWorkingStartTime().toString(),
-                            contract.getStandardWorkingEndTime().toString(),
-                            null,
-                            contract.getHourlyWage(),
-                            contract.getJobDescription(),
-                            contract.isPaidAnnualLeave(),
-                            contract.isSocialInsurance(),
-                            contract.isContractDelivery(),
-                            contract.isSafe()
-                    ))
-                    .collect(Collectors.toList());
-        }
+    @Transactional
+    @Override
+    public List<ContractDTO> getContractsForMember(Integer memberId) {
+        List<Contract> contracts = contractRepository.findByMemberId(memberId);
+        return contracts.stream()
+                .map(contract -> new ContractDTO(
+                        contract.getWorkplace(),
+                        contract.getContractStartDate(),
+                        contract.getContractEndDate(),
+                        contract.getStandardWorkingStartTime(),
+                        contract.getStandardWorkingEndTime(),
+                        null,
+                        contract.getHourlyWage(),
+                        contract.getJobDescription(),
+                        contract.isPaidAnnualLeave(),
+                        contract.isSocialInsurance(),
+                        contract.isContractDelivery(),
+                        contract.isSafe()
+                ))
+                .collect(Collectors.toList());
     }
+
+    @Transactional
+    public ContractDTO getContractForCard(Integer contractId) {
+        Contract contract = contractRepository.findById(contractId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "Contract not found"));
+
+        return ContractDTO.builder()
+                .workplace(contract.getWorkplace())
+                .contractStartDate(contract.getContractStartDate())
+                .contractEndDate(contract.getContractEndDate())
+                .standardWorkingStartTime(contract.getStandardWorkingStartTime())
+                .standardWorkingEndTime(contract.getStandardWorkingEndTime())
+                .workingDays(contract.getWorkingDays().stream()
+                        .map(WorkingDays::getWorkingDay)
+                        .collect(Collectors.toList()))
+                .hourlyWage(contract.getHourlyWage())
+                .jobDescription(contract.getJobDescription())
+                .isPaidAnnualLeave(contract.isPaidAnnualLeave())
+                .isSocialInsurance(contract.isSocialInsurance())
+                .isContractDelivery(contract.isContractDelivery())
+                .isSafe(contract.isSafe())
+                .build();
+    }
+
+}
 
 

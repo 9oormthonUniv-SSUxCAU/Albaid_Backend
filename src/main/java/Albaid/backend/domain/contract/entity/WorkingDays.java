@@ -42,5 +42,8 @@ public class WorkingDays {
     public int hashCode() {
         return Objects.hash(workingDay, contract);
     }
+
 }
+
+
 

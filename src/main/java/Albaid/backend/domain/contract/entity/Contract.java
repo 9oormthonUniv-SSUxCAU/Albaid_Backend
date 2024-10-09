@@ -24,8 +24,12 @@ public class Contract extends BaseEntity {
 
     private String title;
     private String url;
+    @Setter
     private String workplace;
+    private String occupation;
+    @Setter
     private LocalDate contractStartDate;
+    @Setter
     private LocalDate contractEndDate;
     private LocalTime standardWorkingStartTime;
     private LocalTime standardWorkingEndTime;
@@ -70,5 +74,6 @@ public class Contract extends BaseEntity {
         this.workingDays.clear();
         newWorkingDays.forEach(day -> this.addWorkingDay(new WorkingDays(day, this)));
     }
+
 }
 

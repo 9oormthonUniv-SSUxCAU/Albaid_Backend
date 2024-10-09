@@ -140,30 +140,20 @@ public class ResumeServiceImpl implements ResumeService {
     private List<CareerDTO> convertContractsToCareers(List<ContractDTO> contracts) {
         return contracts.stream()
                 .map(contract -> {
-                    // String을 LocalDate로 변환
-                    LocalDate startDate = LocalDate.parse(contract.contractStartDate());
-                    LocalDate endDate = LocalDate.parse(contract.contractEndDate());
+
+                    LocalDate startDate = contract.getContractStartDate();
+                    LocalDate endDate = contract.getContractEndDate();
 
                     // 두 날짜 간의 개월 수 계산
                     long totalMonths = ChronoUnit.MONTHS.between(startDate, endDate);
 
                     return CareerDTO.builder()
-                            .companyName(contract.workplace())  // workplace 정보 추가
-                            .startDate(startDate)  // LocalDate로 변환된 시작일
-                            .endDate(endDate)  // LocalDate로 변환된 종료일
+                            .companyName(contract.getWorkplace())
+                            .startDate(startDate)
+                            .endDate(endDate)
                             .build();
                 })
                 .collect(Collectors.toList());
     }
-
-    // private List<CareerDTO> convertCareersToDTO(List<Career> careers) {
-    //     return careers.stream()
-    //             .map(career -> CareerDTO.builder()
-    //                     .companyName(career.getCompanyName())
-    //                     .startDate(career.getStartDate())
-    //                     .endDate(career.getEndDate())
-    //                     .build())
-    //             .collect(Collectors.toList());
-    // }
 
 }
