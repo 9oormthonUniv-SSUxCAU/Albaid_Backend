@@ -36,8 +36,8 @@ public class AlbaCard extends BaseEntity {
         return this.contract.getWorkplace();
     }
 
-    public LocalDate getContractStartDate() {
-        return this.contract.getContractStartDate();
+    public String getContractStartDate() {
+        return this.contract.getContractStartDate().toString();
     }
 
     public LocalDate getContractEndDate() {

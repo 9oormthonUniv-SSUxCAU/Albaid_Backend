@@ -18,8 +18,8 @@ public class AlbaCardDTO {
     private Integer id;
     private String title;
     private String workplace;
-    private LocalDate contractStartDate;
-    private LocalDate contractEndDate;
+    private String contractStartDate;
+    private String contractEndDate;
     private ContractDTO contract;
 
     private int totalWorkedHoursThisMonth;
@@ -35,7 +35,7 @@ public class AlbaCardDTO {
                 .title(card.getTitle())
                 .workplace(card.getWorkplace())
                 .contractStartDate(card.getContractStartDate())
-                .contractEndDate(card.getContractEndDate())
+                .contractEndDate(card.getContractEndDate().toString())
                 .contract(contract)
                 .totalWorkedHoursThisMonth(totalWorkedHoursThisMonth)
                 .totalWageThisMonth(totalWageThisMonth)

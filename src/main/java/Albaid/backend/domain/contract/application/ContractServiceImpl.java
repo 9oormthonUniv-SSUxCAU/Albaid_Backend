@@ -122,6 +122,28 @@ public class ContractServiceImpl implements ContractService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public ContractDTO getContractForCard(Integer contractId) {
+        Contract contract = contractRepository.findById(contractId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "Contract not found"));
+
+        return new ContractDTO(
+                contract.getWorkplace(),
+                contract.getOccupation(),
+                contract.getContractStartDate().toString(),
+                contract.getContractEndDate().toString(),
+                contract.getStandardWorkingStartTime().toString(),
+                contract.getStandardWorkingEndTime().toString(),
+                contract.getWorkingDays().stream().map(WorkingDays::getWorkingDay).toList(),
+                contract.getHourlyWage(),
+                contract.getJobDescription(),
+                contract.isPaidAnnualLeave(),
+                contract.isSocialInsurance(),
+                contract.isContractDelivery(),
+                contract.isSafe()
+        );
+    }
+
 }
 
 

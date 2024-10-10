@@ -24,4 +24,8 @@ public interface ContractService {
 
     // 경력 사항 (계약서 데이터) 가져오는 메서드
     List<ContractDTO> getContractsForMember(Integer memberId);
+
+    ContractDTO getContractForCard(Integer contractId);
+
+
 }

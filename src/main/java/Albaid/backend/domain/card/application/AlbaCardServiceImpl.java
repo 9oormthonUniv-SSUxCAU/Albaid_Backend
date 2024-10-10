@@ -33,14 +33,14 @@ public class AlbaCardServiceImpl implements AlbaCardService {
 
         ContractDTO contract = contractService.getContractForCard(albaCard.getContract().getId());
 
-        LocalTime startLocalTime = contract.getStandardWorkingStartTime();
-        LocalTime endLocalTime = contract.getStandardWorkingEndTime();
+        LocalTime startLocalTime = LocalTime.parse(contract.standardWorkingStartTime());
+        LocalTime endLocalTime = LocalTime.parse(contract.standardWorkingEndTime());
 
-        int totalWorkedHoursThisMonth = calculateWorkedHoursThisMonth(contract.getWorkingDays(), LocalDate.now(), startLocalTime, endLocalTime);
-        int totalWageThisMonth = totalWorkedHoursThisMonth * contract.getHourlyWage();
-        int totalWorkDays = contract.getWorkingDays().size();
-        int totalWorkedHours = calculateTotalWorkedHours(contract.getWorkingDays(), startLocalTime, endLocalTime);
-        int totalWage = totalWorkedHours * contract.getHourlyWage();
+        int totalWorkedHoursThisMonth = calculateWorkedHoursThisMonth(contract.workingDays(), LocalDate.now(), startLocalTime, endLocalTime);
+        int totalWageThisMonth = totalWorkedHoursThisMonth * contract.hourlyWage();
+        int totalWorkDays = contract.workingDays().size();
+        int totalWorkedHours = calculateTotalWorkedHours(contract.workingDays(), startLocalTime, endLocalTime);
+        int totalWage = totalWorkedHours * contract.hourlyWage();
 
         return AlbaCardDTO.of(albaCard, contract, totalWorkedHoursThisMonth, totalWageThisMonth, totalWorkedHours, totalWorkDays, totalWage);
     }
@@ -60,19 +60,20 @@ public class AlbaCardServiceImpl implements AlbaCardService {
 
     private Contract contractDtoToEntity(ContractDTO contractDTO) {
         return Contract.builder()
-                .workplace(contractDTO.getWorkplace())
-                .contractStartDate(contractDTO.getContractStartDate())
-                .contractEndDate(contractDTO.getContractEndDate())
-                .standardWorkingStartTime(contractDTO.getStandardWorkingStartTime())
-                .standardWorkingEndTime(contractDTO.getStandardWorkingEndTime())
-                .hourlyWage(contractDTO.getHourlyWage())
-                .jobDescription(contractDTO.getJobDescription())
+                .workplace(contractDTO.workplace())
+                .contractStartDate(LocalDate.parse(contractDTO.contractStartDate()))
+                .contractEndDate(LocalDate.parse(contractDTO.contractEndDate()))
+                .standardWorkingStartTime(LocalTime.parse(contractDTO.standardWorkingStartTime()))
+                .standardWorkingEndTime(LocalTime.parse(contractDTO.standardWorkingEndTime()))
+                .hourlyWage(contractDTO.hourlyWage())
+                .jobDescription(contractDTO.jobDescription())
                 .isPaidAnnualLeave(contractDTO.isPaidAnnualLeave())
                 .isSocialInsurance(contractDTO.isSocialInsurance())
                 .isContractDelivery(contractDTO.isContractDelivery())
                 .isSafe(contractDTO.isSafe())
                 .build();
     }
+
 
     @Override
     public AlbaCardDTO createAlbaCard(AlbaCardDTO albaCardDto) {
@@ -101,8 +102,8 @@ public class AlbaCardServiceImpl implements AlbaCardService {
 
         Contract contract = albaCard.getContract();
         contract.setWorkplace(albaCardDto.getWorkplace());
-        contract.setContractStartDate(albaCardDto.getContractStartDate());
-        contract.setContractEndDate(albaCardDto.getContractEndDate());
+        contract.setContractStartDate(LocalDate.parse(albaCardDto.getContractStartDate()));
+        contract.setContractEndDate(LocalDate.parse(albaCardDto.getContractEndDate()));
 
         albaCardRepository.save(albaCard);
         return AlbaCardDTO.of(albaCard, null, 0, 0, 0, 0, 0);
@@ -114,5 +115,6 @@ public class AlbaCardServiceImpl implements AlbaCardService {
                 .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "AlbaCard not found"));
         albaCardRepository.delete(albaCard);
     }
+
 }
 
