@@ -1,4 +1,4 @@
-package Albaid.backend.domain.auth.jwt;
+package Albaid.backend.global.security.jwt;
 
 import Albaid.backend.global.response.CustomException;
 import io.jsonwebtoken.*;

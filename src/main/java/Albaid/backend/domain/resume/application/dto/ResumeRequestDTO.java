@@ -29,3 +29,5 @@ public record ResumeRequestDTO(String title, String summary,
                 .build();
     }
 }
+
+

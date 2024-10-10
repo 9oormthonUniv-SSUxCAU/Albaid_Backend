@@ -1,4 +1,4 @@
-package Albaid.backend.domain.auth.rft.entity;
+package Albaid.backend.global.security.rft.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -6,8 +6,6 @@ import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
-import java.util.List;
-
 public interface ContractRepository extends JpaRepository<Contract, Integer> {
     List<Contract> findByMemberId(Integer memberId);
 

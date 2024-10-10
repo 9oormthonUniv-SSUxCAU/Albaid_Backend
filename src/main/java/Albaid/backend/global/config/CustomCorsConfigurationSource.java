@@ -15,7 +15,7 @@ public class CustomCorsConfigurationSource implements CorsConfigurationSource {
     private final List<String> ALLOWED_METHODS = List.of("POST", "GET", "PATCH", "OPTIONS", "DELETE");
 
     // yml에 프론트의 주소 작성 후 값 주입
-    public CustomCorsConfigurationSource(@Value("${url.base}") String BASE_URL) {
+    public CustomCorsConfigurationSource(@Value("${url.frontend}") String BASE_URL) {
         ALLOWED_ORIGIN = BASE_URL;
     }
 

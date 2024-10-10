@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -73,23 +72,7 @@ public class ContractServiceImpl implements ContractService {
 
         String url = s3ImageService.upload("contract", List.of(image)).get(0);
 
-        Contract contract = Contract.builder()
-                .title(request.title())
-                .url(url)
-                .workplace(request.workplace())
-                .contractStartDate(request.contractStartDate())
-                .contractEndDate(request.contractEndDate())
-                .standardWorkingStartTime(request.standardWorkingStartTime())
-                .standardWorkingEndTime(request.standardWorkingEndTime())
-                .hourlyWage(request.hourlyWage())
-                .jobDescription(request.jobDescription())
-                .isPaidAnnualLeave(request.isPaidAnnualLeave())
-                .isSocialInsurance(request.isSocialInsurance())
-                .isContractDelivery(request.isContractDelivery())
-                .memo(request.memo())
-                .workingDays(new ArrayList<>())
-                .member(member)
-                .build();
+        Contract contract = request.toContract(member, url);
 
         request.workingDays().forEach(day -> contract.addWorkingDay(new WorkingDays(day, contract)));
 
@@ -118,17 +101,17 @@ public class ContractServiceImpl implements ContractService {
         contractRepository.delete(contract);
     }
 
-    @Transactional
     @Override
     public List<ContractDTO> getContractsForMember(Integer memberId) {
         List<Contract> contracts = contractRepository.findByMemberId(memberId);
         return contracts.stream()
                 .map(contract -> new ContractDTO(
                         contract.getWorkplace(),
-                        contract.getContractStartDate(),
-                        contract.getContractEndDate(),
-                        contract.getStandardWorkingStartTime(),
-                        contract.getStandardWorkingEndTime(),
+                        contract.getOccupation(),
+                        contract.getContractStartDate().toString(),
+                        contract.getContractEndDate().toString(),
+                        contract.getStandardWorkingStartTime().toString(),
+                        contract.getStandardWorkingEndTime().toString(),
                         null,
                         contract.getHourlyWage(),
                         contract.getJobDescription(),
@@ -139,30 +122,6 @@ public class ContractServiceImpl implements ContractService {
                 ))
                 .collect(Collectors.toList());
     }
-
-    @Transactional
-    public ContractDTO getContractForCard(Integer contractId) {
-        Contract contract = contractRepository.findById(contractId)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "Contract not found"));
-
-        return ContractDTO.builder()
-                .workplace(contract.getWorkplace())
-                .contractStartDate(contract.getContractStartDate())
-                .contractEndDate(contract.getContractEndDate())
-                .standardWorkingStartTime(contract.getStandardWorkingStartTime())
-                .standardWorkingEndTime(contract.getStandardWorkingEndTime())
-                .workingDays(contract.getWorkingDays().stream()
-                        .map(WorkingDays::getWorkingDay)
-                        .collect(Collectors.toList()))
-                .hourlyWage(contract.getHourlyWage())
-                .jobDescription(contract.getJobDescription())
-                .isPaidAnnualLeave(contract.isPaidAnnualLeave())
-                .isSocialInsurance(contract.isSocialInsurance())
-                .isContractDelivery(contract.isContractDelivery())
-                .isSafe(contract.isSafe())
-                .build();
-    }
-
 }
 
 
