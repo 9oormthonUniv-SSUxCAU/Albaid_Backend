@@ -1,159 +1,122 @@
 package Albaid.backend.domain.resume.application;
 
-import Albaid.backend.domain.Career.application.dto.CareerDTO;
-import Albaid.backend.domain.Career.entity.Career;
-import Albaid.backend.domain.contract.application.ContractService;
-import Albaid.backend.domain.contract.application.dto.ContractDTO;
-import Albaid.backend.domain.resume.application.dto.ResumeDTO;
+import Albaid.backend.domain.member.application.MemberService;
+import Albaid.backend.domain.member.entity.Member;
+import Albaid.backend.domain.resume.application.dto.*;
+import Albaid.backend.domain.resume.entity.Career;
 import Albaid.backend.domain.resume.entity.Resume;
+import Albaid.backend.domain.resume.repository.CareerRepository;
 import Albaid.backend.domain.resume.repository.ResumeRepository;
 import Albaid.backend.global.response.CustomException;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static Albaid.backend.global.response.ErrorCode.NOT_FOUND_RESOURCE;
 
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class ResumeServiceImpl implements ResumeService {
 
     private final ResumeRepository resumeRepository;
-    private final ContractService contractService;
+    private final CareerRepository careerRepository;
+
+    private final MemberService memberService;
+
+    @Transactional
+    @Override
+    public ResumeResponseDTO createResume(ResumeRequestDTO request) {
+
+        Member member = memberService.getCurrentMember();
+
+        Resume resume = ResumeRequestDTO.toEntity(request, member);
+        List<Career> careers = resume.getCareers();
+        for (Career career : careers) {
+            career.setResume(resume);
+        }
+
+        Resume savedResume = resumeRepository.save(resume);
+
+        return ResumeResponseDTO.of(savedResume);
+    }
 
     @Override
-    public ResumeDTO getResumeById(Long id) {
-        Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "이력서를 찾을 수 없습니다."));
+    public List<SummaryResumeDTO> getResumeList() {
+        Member member = memberService.getCurrentMember();
+        List<Resume> resumes = resumeRepository.findAllByMemberOrderByCreatedAtDesc(member);
+        return resumes.stream().map(SummaryResumeDTO::of).toList();
+    }
 
-        // 근로계약서에서 추출된 경력사항 가져오기
-        List<ContractDTO> contracts = contractService.getContractsForMember(resume.getMember().getId());
-
-        // 경력사항 추가
-        // 기존의 경력 + 근로계약서에서 추출된 경력 결합
-        List<CareerDTO> combinedCareers = new ArrayList<>();
-        // combinedCareers.addAll(convertCareersToDTO(resume.getCareers()));  // 이력서에 추가된 경력 주석 처리
-        combinedCareers.addAll(convertContractsToCareers(contracts));  // 계약서에서 추출된 경력
-
-        // 최종적으로 결합된 경력을 포함한 ResumeDTO 반환
-        return ResumeDTO.of(resume, combinedCareers);
+    @Override
+    public ResumeResponseDTO getResumeById(Integer id) {
+        Resume resume = resumeRepository.findById(id).orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "이력서를 찾을 수 없습니다."));
+        List<Career> sortedCareer = careerRepository.findByResumeOrderByStartDateDesc(resume);
+        resume.setCareers(sortedCareer);
+        return ResumeResponseDTO.of(resume);
     }
 
     @Transactional
     @Override
-    public ResumeDTO createResume(ResumeDTO resumeDto) {
-        Resume resume = Resume.builder()
-                .title(resumeDto.getTitle())
-                .summary(resumeDto.getSummary())
-                .phone(resumeDto.getPhone())
-                .address(resumeDto.getAddress())
-                .email(resumeDto.getEmail())
-                .finalEducation(resumeDto.getFinalEducation())
-                .build();
+    public ResumeResponseDTO updateResume(Integer id, ResumeRequestDTO request) {
 
-        resumeRepository.save(resume);
-
-        // 계약서 정보도 함께 처리
-        List<ContractDTO> contracts = contractService.getContractsForMember(resumeDto.getMemberId());
-        List<CareerDTO> careersFromContracts = convertContractsToCareers(contracts);
-
-        return ResumeDTO.of(resume, careersFromContracts);
-    }
-
-    @Override
-    public String generateShareLink(Long id) {
         Resume resume = resumeRepository.findById(id)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "이력서를 찾을 수 없습니다."));
 
-        // 공유 링크 생성
-        String shareLink = "http://example.com/share/resume/" + id;
-        return shareLink;
+        // 이력서 정보 업데이트
+        resume.update(
+                request.title(),
+                request.summary(),
+                request.phone(),
+                request.address(),
+                request.email(),
+                request.finalEducation(),
+                request.qualifications(),
+                request.desiredLocation(),
+                request.desiredJob()
+        );
+
+        // 기존 경력 삭제 및 새로운 경력 추가
+        resume.getCareers().clear();
+
+        // 새로운 Career 엔티티 리스트 생성
+        List<Career> newCareers = request.careers().stream()
+                .map(careerDTO -> {
+                    Career newCareer = CareerRequestDTO.toEntity(careerDTO);
+                    newCareer.setResume(resume);
+                    return newCareer;
+                })
+                .collect(Collectors.toList());
+
+        // 새로운 경력사항들을 한 번에 저장
+        List<Career> savedCareers = careerRepository.saveAll(newCareers); // saveAll 사용
+
+        resume.getCareers().addAll(savedCareers);
+
+        return ResumeResponseDTO.of(resume);
     }
 
+    @Transactional
     @Override
-    public ResumeDTO updateResume(Long id, ResumeDTO resumeDto) {
-        Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "이력서를 찾을 수 없습니다."));
-
-        // 전달받은 DTO 값을 기존 이력서에 업데이트
-        resume.setTitle(resumeDto.getTitle());
-        resume.setSummary(resumeDto.getSummary());
-        resume.setPhone(resumeDto.getPhone());
-        resume.setAddress(resumeDto.getAddress());
-        resume.setEmail(resumeDto.getEmail());
-        resume.setFinalEducation(resumeDto.getFinalEducation());
-        resume.setDesiredLocation(resumeDto.getDesiredLocation());
-        resume.setDesiredJob(resumeDto.getDesiredJob());
-        resume.setTotalCareerDuration(resumeDto.getTotalCareerDuration());
-
-        resumeRepository.save(resume);
-
-        // 계약서 정보도 함께 처리
-        List<ContractDTO> contracts = contractService.getContractsForMember(resumeDto.getMemberId());
-        List<CareerDTO> careersFromContracts = convertContractsToCareers(contracts);
-
-        return ResumeDTO.of(resume, careersFromContracts);
-    }
-
-    @Override
-    public ResumeDTO addCareer(Long id, CareerDTO careerDto) {
-        Resume resume = resumeRepository.findById(id)
-                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "이력서를 찾을 수 없습니다."));
-
-        // 새로운 경력 생성 및 추가
-        Career career = Career.builder()
-                .companyName(careerDto.getCompanyName())
-                .startDate(careerDto.getStartDate())
-                .endDate(careerDto.getEndDate())
-                .resume(resume)
-                .build();
-
-        resume.getCareers().add(career); // 이력서에 새 경력 추가
-        resumeRepository.save(resume); // 이력서 저장
-
-        List<ContractDTO> contracts = contractService.getContractsForMember(resume.getMember().getId());
-
-        // 기존의 경력 + 근로계약서에서 추출된 경력 결합
-        List<CareerDTO> combinedCareers = new ArrayList<>();
-        // combinedCareers.addAll(convertCareersToDTO(resume.getCareers()));  // 이력서에 추가된 경력 주석 처리
-        combinedCareers.addAll(convertContractsToCareers(contracts));  // 계약서에서 추출된 경력
-
-        // 최종적으로 결합된 경력을 포함한 ResumeDTO 반환
-        return ResumeDTO.of(resume, combinedCareers);
-    }
-
-    @Override
-    public void deleteResume(Long id) {
+    public void deleteResume(Integer id) {
         Resume resume = resumeRepository.findById(id)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "이력서를 찾을 수 없습니다."));
 
         resumeRepository.delete(resume);
     }
 
-    private List<CareerDTO> convertContractsToCareers(List<ContractDTO> contracts) {
-        return contracts.stream()
-                .map(contract -> {
+    @Override
+    public List<CareerResponseDTO> getCareer(Integer id) {
+        Resume resume = resumeRepository.findById(id)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "이력서를 찾을 수 없습니다."));
 
-                    LocalDate startDate = contract.getContractStartDate();
-                    LocalDate endDate = contract.getContractEndDate();
+        List<Career> careers = careerRepository.findByResumeOrderByStartDateDesc(resume);
 
-                    // 두 날짜 간의 개월 수 계산
-                    long totalMonths = ChronoUnit.MONTHS.between(startDate, endDate);
-
-                    return CareerDTO.builder()
-                            .companyName(contract.getWorkplace())
-                            .startDate(startDate)
-                            .endDate(endDate)
-                            .build();
-                })
+        return careers.stream()
+                .map(CareerResponseDTO::of)
                 .collect(Collectors.toList());
     }
-
 }

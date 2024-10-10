@@ -6,26 +6,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
-//@Getter
-//@Builder
-//public record ContractDTO(
-//        String workplace,
-//        String contractStartDate,
-//        String contractEndDate,
-//        @Getter
-//        String standardWorkingStartTime,
-//        @Getter
-//        String standardWorkingEndTime,
-//        @Getter
-//        List<String> workingDays,
-//        @Getter
-//        int hourlyWage,
-//        String jobDescription,
-//        boolean isPaidAnnualLeave,
-//        boolean isSocialInsurance,
-//        boolean isContractDelivery,
-//        boolean isSafe
-//){}
 
 @Getter
 @Builder

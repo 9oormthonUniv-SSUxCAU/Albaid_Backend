@@ -1,15 +1,15 @@
-package Albaid.backend.domain.Career.entity;
+package Albaid.backend.domain.resume.entity;
 
-import Albaid.backend.domain.resume.entity.Resume;
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Builder
-@Getter
 @Entity
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Career {
 
     @Id
@@ -17,11 +17,15 @@ public class Career {
     private Integer id;
 
     private String companyName;
+    private String occupation;
     private LocalDate startDate;
     private LocalDate endDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
+    public void setResume(Resume resume) {
+        this.resume = resume;
+    }
 }
