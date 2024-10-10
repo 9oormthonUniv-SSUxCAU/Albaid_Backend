@@ -1,19 +1,23 @@
 package Albaid.backend.domain.resume.application;
 
-import Albaid.backend.domain.career.application.dto.CareerDTO;
-import Albaid.backend.domain.resume.application.dto.ResumeDTO;
+import Albaid.backend.domain.resume.application.dto.CareerResponseDTO;
+import Albaid.backend.domain.resume.application.dto.ResumeRequestDTO;
+import Albaid.backend.domain.resume.application.dto.ResumeResponseDTO;
+import Albaid.backend.domain.resume.application.dto.SummaryResumeDTO;
+
+import java.util.List;
 
 public interface ResumeService {
 
-    ResumeDTO getResumeById(Long id);
+    ResumeResponseDTO createResume(ResumeRequestDTO request);
 
-    ResumeDTO createResume(ResumeDTO resumeDto);
+    List<SummaryResumeDTO> getResumeList();
 
-    String generateShareLink(Long id);
+    ResumeResponseDTO getResumeById(Integer id);
 
-    ResumeDTO updateResume(Long id, ResumeDTO resumeDto);
+    ResumeResponseDTO updateResume(Integer id, ResumeRequestDTO request);
 
-    ResumeDTO addCareer(Long id, CareerDTO careerDto);
+    void deleteResume(Integer id);
 
-    void deleteResume(Long id);
+    List<CareerResponseDTO> getCareer(Integer id);
 }
