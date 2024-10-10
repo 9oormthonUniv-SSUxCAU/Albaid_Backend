@@ -1,4 +1,4 @@
-package Albaid.backend.global.enums;
+package Albaid.backend.domain.resume.entity;
 
 import lombok.Getter;
 
@@ -17,7 +17,4 @@ public enum EducationLevel {
         this.displayName = displayName;
     }
 
-    public String getDisplayName() {
-        return displayName;
-    }
 }

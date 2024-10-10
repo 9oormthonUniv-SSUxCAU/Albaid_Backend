@@ -1,6 +1,5 @@
-package Albaid.backend.domain.career.entity;
+package Albaid.backend.domain.resume.entity;
 
-import Albaid.backend.domain.resume.entity.Resume;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,6 +17,7 @@ public class Career {
     private Integer id;
 
     private String companyName;
+    private String occupation;
     private LocalDate startDate;
     private LocalDate endDate;
 
@@ -25,4 +25,7 @@ public class Career {
     @JoinColumn(name = "resume_id")
     private Resume resume;
 
+    public void setResume(Resume resume) {
+        this.resume = resume;
+    }
 }
