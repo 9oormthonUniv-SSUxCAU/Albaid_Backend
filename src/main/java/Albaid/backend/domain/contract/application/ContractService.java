@@ -21,4 +21,6 @@ public interface ContractService {
     void deleteContract(Integer contractId);
 
     ResponseContractDTO updateContract(Integer contractId, RequestContractDTO request);
+
+    ContractDTO getContractForCard(Integer contractId);
 }

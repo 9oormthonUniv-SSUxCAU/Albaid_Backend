@@ -1,5 +1,6 @@
 package Albaid.backend.domain.contract.entity;
 
+import Albaid.backend.domain.card.entity.AlbaCard;
 import Albaid.backend.domain.contract.application.dto.RequestContractDTO;
 import Albaid.backend.domain.member.entity.Member;
 import Albaid.backend.global.base.BaseEntity;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
@@ -40,6 +42,9 @@ public class Contract extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToOne(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AlbaCard albaCard;
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkingDays> workingDays = new ArrayList<>();

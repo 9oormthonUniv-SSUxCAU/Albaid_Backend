@@ -46,4 +46,6 @@ public class AuthController {
     public String failure() {
         return "failure";
     }
+
+
 }

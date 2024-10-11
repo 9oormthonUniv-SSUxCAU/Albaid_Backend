@@ -1,5 +1,6 @@
 package Albaid.backend.domain.contract.application.dto;
 
+import java.time.LocalTime;
 import java.util.List;
 
 public record ContractDTO(
@@ -15,6 +16,29 @@ public record ContractDTO(
         boolean isSocialInsurance,
         boolean isContractDelivery,
         boolean isSafe
+
+
 ) {
+
+    @Override
+    public boolean isPaidAnnualLeave() {
+        return isPaidAnnualLeave;
+    }
+
+    @Override
+    public boolean isSocialInsurance() {
+        return isSocialInsurance;
+    }
+
+    @Override
+    public boolean isContractDelivery() {
+        return isContractDelivery;
+    }
+
+    @Override
+    public boolean isSafe() {
+        return isSafe;
+    }
+
 }
 
