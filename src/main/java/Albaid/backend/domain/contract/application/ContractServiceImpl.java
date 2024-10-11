@@ -107,7 +107,6 @@ public class ContractServiceImpl implements ContractService {
         return contracts.stream()
                 .map(contract -> new ContractDTO(
                         contract.getWorkplace(),
-                        contract.getOccupation(),
                         contract.getContractStartDate().toString(),
                         contract.getContractEndDate().toString(),
                         contract.getStandardWorkingStartTime().toString(),

@@ -11,7 +11,6 @@ import java.util.List;
 public record RequestContractDTO(
         String title,
         String workplace,
-        String occupation,
         LocalDate contractStartDate,
         LocalDate contractEndDate,
         LocalTime standardWorkingStartTime,
@@ -29,7 +28,6 @@ public record RequestContractDTO(
                 .title(this.title)
                 .url(url)
                 .workplace(this.workplace)
-                .occupation(this.occupation)
                 .contractStartDate(this.contractStartDate)
                 .contractEndDate(this.contractEndDate)
                 .standardWorkingStartTime(this.standardWorkingStartTime)
