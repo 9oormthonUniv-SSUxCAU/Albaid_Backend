@@ -21,7 +21,4 @@ public interface ContractService {
     void deleteContract(Integer contractId);
 
     ResponseContractDTO updateContract(Integer contractId, RequestContractDTO request);
-
-    // 경력 사항 (계약서 데이터) 가져오는 메서드
-    List<ContractDTO> getContractsForMember(Integer memberId);
 }
