@@ -6,6 +6,7 @@ import Albaid.backend.global.response.Response;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -25,17 +26,25 @@ public class CalendarController {
         return Response.success(schedules);
     }
 
-    // 일정 생성
-    @PostMapping
-    public Response<Calendar> createSchedule(@RequestBody Calendar calendar) {
-        Calendar createdCalendar = calendarService.createSchedule(calendar);
-        return Response.success(createdCalendar);
+    // 오늘의 알바 조회
+    @GetMapping("/today")
+    public Response<List<Calendar>> getTodayAlba() {
+        return Response.success(calendarService.findTodayAlba());
     }
 
-    // 일정 삭제
-    @DeleteMapping("/{id}")
-    public Response<Void> deleteSchedule(@PathVariable Long id) {
-        calendarService.deleteSchedule(id);
+    // 알바 일정 수정
+    @PutMapping("/update/{calendarId}")
+    public Response<Void> updateAlbaSchedule(@PathVariable Integer calendarId, @RequestParam LocalTime newStartTime, @RequestParam LocalTime newEndTime) {
+        calendarService.updateAlbaSchedule(calendarId, newStartTime, newEndTime);
         return Response.success();
     }
+
+    // 알바 일정 삭제
+    @DeleteMapping("/delete/{calendarId}")
+    public Response<Void> deleteAlbaSchedule(@PathVariable Integer calendarId) {
+        calendarService.deleteAlbaSchedule(calendarId);
+        return Response.success();
+    }
+
 }
+
