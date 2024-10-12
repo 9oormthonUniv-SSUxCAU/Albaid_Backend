@@ -32,6 +32,8 @@ public class Resume extends BaseEntity {
     private String desiredLocation;
     private String desiredJob;
 
+    private boolean isBaseResume;
+
     // Member 테이블과의 외래 키 관계 설정
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")

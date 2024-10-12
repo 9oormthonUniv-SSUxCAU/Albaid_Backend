@@ -1,10 +1,12 @@
 package Albaid.backend.global.security.oauth.service;
 
-import Albaid.backend.global.security.jwt.JwtTokenUtils;
-import Albaid.backend.global.security.rft.service.RefreshTokenService;
 import Albaid.backend.domain.member.entity.Member;
 import Albaid.backend.domain.member.repository.MemberRepository;
+import Albaid.backend.domain.resume.entity.Resume;
+import Albaid.backend.domain.resume.repository.ResumeRepository;
 import Albaid.backend.global.response.CustomException;
+import Albaid.backend.global.security.jwt.JwtTokenUtils;
+import Albaid.backend.global.security.rft.service.RefreshTokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,13 +25,15 @@ import static Albaid.backend.global.response.ErrorCode.NOT_FOUND_RESOURCE;
 public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final MemberRepository memberRepository;
+    private final ResumeRepository resumeRepository;
     private final RefreshTokenService refreshTokenService;
     private final JwtTokenUtils jwtTokenUtils;
 
     private final String SUCCESS_URL;
 
-    public OAuth2SuccessHandler(MemberRepository memberRepository, RefreshTokenService refreshTokenService, JwtTokenUtils jwtTokenUtils, @Value("${url.backend}") String BASE_URL) {
+    public OAuth2SuccessHandler(MemberRepository memberRepository, ResumeRepository resumeRepository, RefreshTokenService refreshTokenService, JwtTokenUtils jwtTokenUtils, @Value("${url.backend}") String BASE_URL) {
         this.memberRepository = memberRepository;
+        this.resumeRepository = resumeRepository;
         this.refreshTokenService = refreshTokenService;
         this.jwtTokenUtils = jwtTokenUtils;
         this.SUCCESS_URL = BASE_URL + "/api/auth/success";
@@ -45,7 +49,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             throw new CustomException(NOT_FOUND_RESOURCE, "Member not found");
         }
 
+        if (!resumeRepository.existsByMemberIdAndIsBaseResume(member.getId(), true)) {
+            Resume resume = Resume.builder()
+                    .member(member)
+                    .title("[기본] 이력서")
+                    .isBaseResume(true)
+                    .build();
 
+            resumeRepository.save(resume);
+        }
 
         String accessToken = jwtTokenUtils.generateAccessToken(providerId);
         Date tokenExpirationDate = jwtTokenUtils.getTokenExpirationDate();

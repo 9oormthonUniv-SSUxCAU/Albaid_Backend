@@ -43,7 +43,7 @@ public class Contract extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(mappedBy = "contract")
     private AlbaCard albaCard;
 
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
