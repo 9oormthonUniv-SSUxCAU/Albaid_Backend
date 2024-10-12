@@ -46,6 +46,7 @@ public class Contract extends BaseEntity {
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkingDays> workingDays = new ArrayList<>();
 
+
     public void addWorkingDay(WorkingDays workingDay) {
         this.workingDays.add(workingDay);
         workingDay.setContract(this);

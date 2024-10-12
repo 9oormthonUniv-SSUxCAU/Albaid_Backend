@@ -15,7 +15,7 @@ public class AlbaCardController {
 
     // 알바카드 조회
     @GetMapping("/{id}")
-    public Response<AlbaCardDTO> getAlbaCard(@PathVariable Long id) {
+    public Response<AlbaCardDTO> getAlbaCard(@PathVariable Integer id) {
         AlbaCardDTO albaCard = albaCardService.getAlbaCardById(id);
         return Response.success(albaCard);
     }
@@ -29,14 +29,14 @@ public class AlbaCardController {
 
     // 알바카드 수정
     @PutMapping("/{id}")
-    public Response<AlbaCardDTO> updateAlbaCard(@PathVariable Long id, @RequestBody AlbaCardDTO albaCardDto) {
+    public Response<AlbaCardDTO> updateAlbaCard(@PathVariable Integer id, @RequestBody AlbaCardDTO albaCardDto) {
         AlbaCardDTO updatedAlbaCard = albaCardService.updateAlbaCard(id, albaCardDto);
         return Response.success(updatedAlbaCard);
     }
 
     // 알바카드 삭제
     @DeleteMapping("/{id}")
-    public Response<Void> deleteAlbaCard(@PathVariable Long id) {
+    public Response<Void> deleteAlbaCard(@PathVariable Integer id) {
         albaCardService.deleteAlbaCard(id);
         return Response.success();
     }

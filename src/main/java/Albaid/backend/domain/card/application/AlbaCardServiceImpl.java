@@ -27,7 +27,7 @@ public class AlbaCardServiceImpl implements AlbaCardService {
     private final ContractService contractService;
 
     @Override
-    public AlbaCardDTO getAlbaCardById(Long id) {
+    public AlbaCardDTO getAlbaCardById(Integer id) {
         AlbaCard albaCard = albaCardRepository.findById(id)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "AlbaCard not found"));
 
@@ -93,7 +93,7 @@ public class AlbaCardServiceImpl implements AlbaCardService {
         return AlbaCardDTO.of(albaCard, null, 0, 0, 0, 0, 0);
     }
     @Override
-    public AlbaCardDTO updateAlbaCard(Long id, AlbaCardDTO albaCardDto) {
+    public AlbaCardDTO updateAlbaCard(Integer id, AlbaCardDTO albaCardDto) {
         AlbaCard albaCard = albaCardRepository.findById(id)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "AlbaCard not found"));
 
@@ -110,7 +110,7 @@ public class AlbaCardServiceImpl implements AlbaCardService {
     }
 
     @Override
-    public void deleteAlbaCard(Long id) {
+    public void deleteAlbaCard(Integer id) {
         AlbaCard albaCard = albaCardRepository.findById(id)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "AlbaCard not found"));
         albaCardRepository.delete(albaCard);
