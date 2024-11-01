@@ -36,10 +36,14 @@ public class Calendar {
     private AlbaCard albaCard; // 알바카드와 연관 관계
 
 
-    public Calendar(AlbaCard albaCard, LocalDate date, LocalTime startTime, LocalTime endTime) {
+    @Column(nullable = false)
+    private String workplace; // 근무 장소
+
+    public Calendar(AlbaCard albaCard, LocalDate date) {
         this.albaCard = albaCard;
         this.date = date;
-        this.startTime = startTime;
-        this.endTime = endTime;
+        this.startTime = albaCard.getContract().getStandardWorkingStartTime();
+        this.endTime = albaCard.getContract().getStandardWorkingEndTime();
+        this.workplace = albaCard.getWorkplace();
     }
 }

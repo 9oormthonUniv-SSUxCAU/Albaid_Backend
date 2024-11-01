@@ -1,5 +1,6 @@
 package Albaid.backend.domain.contract.application;
 
+import Albaid.backend.domain.card.repository.AlbaCardRepository;
 import Albaid.backend.domain.contract.application.dto.ContractDTO;
 import Albaid.backend.domain.contract.application.dto.ContractListDTO;
 import Albaid.backend.domain.contract.application.dto.RequestContractDTO;
@@ -19,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static Albaid.backend.global.response.ErrorCode.INTERNAL_SERVER_ERROR;
 import static Albaid.backend.global.response.ErrorCode.NOT_FOUND_RESOURCE;
@@ -32,6 +31,7 @@ import static Albaid.backend.global.response.ErrorCode.NOT_FOUND_RESOURCE;
 public class ContractServiceImpl implements ContractService {
 
     private final ContractRepository contractRepository;
+    private final AlbaCardRepository albaCardRepository;
 
     private final MemberService memberService;
     private final OcrService ocrService;
@@ -98,31 +98,34 @@ public class ContractServiceImpl implements ContractService {
     public void deleteContract(Integer contractId) {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "계약서를 찾을 수 없습니다."));
+
+        // 계약서에 연결된 알바카드 삭제
+        albaCardRepository.deleteByContractId(contractId);
+
+        // S3에 있는 이미지 삭제
         s3ImageService.deleteImagesFromS3(List.of(contract.getUrl()));
+
+        // 계약서 삭제
         contractRepository.delete(contract);
     }
 
+    public ContractDTO getContractForCard(Integer contractId) {
+        Contract contract = contractRepository.findById(contractId)
+                .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "Contract not found"));
 
-        @Override
-        public List<ContractDTO> getContractsForMember(Integer memberId) {
-            List<Contract> contracts = contractRepository.findByMemberId(memberId);
-            return contracts.stream()
-                    .map(contract -> new ContractDTO(
-                            contract.getWorkplace(),
-                            contract.getContractStartDate().toString(),
-                            contract.getContractEndDate().toString(),
-                            contract.getStandardWorkingStartTime().toString(),
-                            contract.getStandardWorkingEndTime().toString(),
-                            null,
-                            contract.getHourlyWage(),
-                            contract.getJobDescription(),
-                            contract.isPaidAnnualLeave(),
-                            contract.isSocialInsurance(),
-                            contract.isContractDelivery(),
-                            contract.isSafe()
-                    ))
-                    .collect(Collectors.toList());
-        }
+        return new ContractDTO(
+                contract.getWorkplace(),
+                contract.getContractStartDate().toString(),
+                contract.getContractEndDate().toString(),
+                contract.getStandardWorkingStartTime().toString(),
+                contract.getStandardWorkingEndTime().toString(),
+                contract.getWorkingDays().stream().map(WorkingDays::getWorkingDay).toList(),
+                contract.getHourlyWage(),
+                contract.getJobDescription(),
+                contract.isPaidAnnualLeave(),
+                contract.isSocialInsurance(),
+                contract.isContractDelivery(),
+                contract.isSafe()
+        );
     }
-
-
+}

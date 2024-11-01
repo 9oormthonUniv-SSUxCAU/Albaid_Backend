@@ -5,7 +5,6 @@ import java.util.List;
 
 public record ContractDTO(
         String workplace,
-        String occupation,
         String contractStartDate,
         String contractEndDate,
         String standardWorkingStartTime,
@@ -42,4 +41,3 @@ public record ContractDTO(
     }
 
 }
-

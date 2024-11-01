@@ -1,5 +1,6 @@
 package Albaid.backend.domain.contract.entity;
 
+import Albaid.backend.domain.card.entity.AlbaCard;
 import Albaid.backend.domain.contract.application.dto.RequestContractDTO;
 import Albaid.backend.domain.member.entity.Member;
 import Albaid.backend.global.base.BaseEntity;
@@ -26,7 +27,6 @@ public class Contract extends BaseEntity {
     private String title;
     private String url;
     private String workplace;
-    private String occupation;
     private LocalDate contractStartDate;
     private LocalDate contractEndDate;
     private LocalTime standardWorkingStartTime;
@@ -43,9 +43,11 @@ public class Contract extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(mappedBy = "contract")
+    private AlbaCard albaCard;
+
     @OneToMany(mappedBy = "contract", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<WorkingDays> workingDays = new ArrayList<>();
-
 
     public void addWorkingDay(WorkingDays workingDay) {
         this.workingDays.add(workingDay);
@@ -74,4 +76,3 @@ public class Contract extends BaseEntity {
         newWorkingDays.forEach(day -> this.addWorkingDay(new WorkingDays(day, this)));
     }
 }
-
