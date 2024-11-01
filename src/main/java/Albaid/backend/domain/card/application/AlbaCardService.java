@@ -1,10 +1,20 @@
 package Albaid.backend.domain.card.application;
 
-import Albaid.backend.domain.card.application.dto.AlbaCardDTO;
+import Albaid.backend.domain.card.application.dto.AlbaCardListDTO;
+import Albaid.backend.domain.card.application.dto.AlbaCardResponseDTO;
+import Albaid.backend.domain.card.application.dto.AlbaCardUpdateDto;
 
 public interface AlbaCardService {
-    AlbaCardDTO getAlbaCardById(Integer id);
-    AlbaCardDTO createAlbaCard(AlbaCardDTO albaCardDto);
-    AlbaCardDTO updateAlbaCard(Integer id, AlbaCardDTO albaCardDto);
+
+    AlbaCardResponseDTO createAlbaCard(Integer contractId);
+
+    AlbaCardListDTO getAlbaCardList();
+
+    AlbaCardResponseDTO getAlbaCardById(Integer id);
+
+    AlbaCardResponseDTO updateAlbaCard(Integer id, AlbaCardUpdateDto request);
+
     void deleteAlbaCard(Integer id);
+
+    void endAlbaCard(Integer id);
 }
