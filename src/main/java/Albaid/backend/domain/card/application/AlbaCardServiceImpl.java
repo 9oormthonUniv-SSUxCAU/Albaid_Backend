@@ -51,8 +51,11 @@ public class AlbaCardServiceImpl implements AlbaCardService {
         Contract contract = contractRepository.findById(contractId)
                 .orElseThrow(() -> new CustomException(NOT_FOUND_RESOURCE, "Contract not found"));
 
+        List<AlbaCard> albaCards = albaCardRepository.findAllByMemberId(member.getId());
+
         AlbaCard albaCard = AlbaCard.builder()
                 .contract(contract)
+                .title("알바카드 " + (albaCards.size() + 1))
                 .isAlive(true)
                 .member(member)
                 .build();

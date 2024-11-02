@@ -17,7 +17,6 @@ public class Career {
     private Integer id;
 
     private String companyName;
-    private String occupation;
     private LocalDate startDate;
     private LocalDate endDate;
 

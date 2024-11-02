@@ -47,7 +47,7 @@ public class ResumeServiceImpl implements ResumeService {
     @Override
     public List<SummaryResumeDTO> getResumeList() {
         Member member = memberService.getCurrentMember();
-        List<Resume> resumes = resumeRepository.findAllByMemberOrderByCreatedAtDesc(member);
+        List<Resume> resumes = resumeRepository.findAllByMemberOrderByCreatedAtAsc(member);
         return resumes.stream().map(SummaryResumeDTO::of).toList();
     }
 

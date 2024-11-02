@@ -7,17 +7,24 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 @Builder
-public record CareerResponseDTO(Integer id, String companyName, String occupation, LocalDate startDate, LocalDate endDate,
+public record CareerResponseDTO(Integer id, String companyName, LocalDate startDate, LocalDate endDate,
                                 String totalMonths) {
 
     public static CareerResponseDTO of(Career career) {
+        String totalMonths;
+        if (career.getStartDate() != null && career.getEndDate() != null) {
+            totalMonths = ChronoUnit.MONTHS.between(career.getStartDate(), career.getEndDate()) + "개월";
+        } else {
+            totalMonths = "";
+        }
+
         return CareerResponseDTO.builder()
                 .id(career.getId())
                 .companyName(career.getCompanyName())
-                .occupation(career.getOccupation())
                 .startDate(career.getStartDate())
                 .endDate(career.getEndDate())
-                .totalMonths(ChronoUnit.MONTHS.between(career.getStartDate(), career.getEndDate()) + "개월")
+                .totalMonths(totalMonths)
                 .build();
     }
 }
+

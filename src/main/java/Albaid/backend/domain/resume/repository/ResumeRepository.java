@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ResumeRepository extends JpaRepository<Resume, Integer> {
 
-    List<Resume> findAllByMemberOrderByCreatedAtDesc(Member member);
+    List<Resume> findAllByMemberOrderByCreatedAtAsc(Member member);
 
     boolean existsByMemberIdAndIsBaseResume(Integer memberId, boolean isBaseResume);
 
